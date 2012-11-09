@@ -1,0 +1,7 @@
+--require should
+-R spec
+--ui bdd
+--compilers coffee:coffee-script,ls:LiveScript
+--recursive
+--timeout 3000
+--globals i
