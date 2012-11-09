@@ -5,7 +5,8 @@ require! {
   request: 'supertest'
 }
 products = require('../../domain/product')(mongoose)
-sut = require('../../server/app')(products)
+categories = require('../../domain/category')(mongoose)
+sut = require('../../server/app')(products, categories)
 
 # Constants
 const contentTypes = {
@@ -60,3 +61,26 @@ describe 'App', ->
           .end (_, res) ->
             res.should.have.status 404
             done!
+
+
+  describe 'Kategorien', ->
+    afterEach ->
+      categories.findAll.restore?()
+      categories.findById.restore?()
+
+
+    describe 'GET: /categories', ->
+
+      @it 'lists all categories', (done) ->
+        stub = sinon.stub categories, 'findAll'
+                    .callsArgWith 0, null, []
+        request sut
+          .get '/categories'
+          .end (_, res)->
+            res.should.have.status 200
+            res.should.be.json
+            res.text.should.equal '[]'
+            stub.callCount.should.equal 1
+            done!
+
+

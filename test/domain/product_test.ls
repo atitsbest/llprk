@@ -34,12 +34,12 @@ describe 'Product', ->
     categories.model.remove {}, -> done!
 
 
-  @it 'lists all sut', (done)->
+  @it 'lists all products', (done)->
     err, ps <- sut.findAll!
     ps.length.should.equal 1
     done!
 
-  @it 'gets sut by id', (done) ->
+  @it 'gets product by id', (done) ->
     err, p <- sut.findById currentProduct._id
     should.not.exist err
     should.exist p
@@ -93,4 +93,3 @@ describe 'Product', ->
       pic._id.should.eql p.pictures[0]
       done!
 
-    
