@@ -1,4 +1,4 @@
-require! { 
+require! {
   mongoose
   should
 }
@@ -19,7 +19,7 @@ describe 'Category', ->
 
   afterEach (done)->
     sut.model.remove {}, -> done!
-  
+
 
   @it 'lists all sut', (done)->
     err, cs <- sut.findAll!
@@ -42,7 +42,7 @@ describe 'Category', ->
       _, cs <- sut.findAll!
       cs.length.should.equal(2)
       done!
-    
+
     @it 'needs a name', (done) ->
       err <- sut.insert null, 'blah1'
       should.exist err, 'Validation not triggered.'
@@ -51,4 +51,14 @@ describe 'Category', ->
     @it 'needs a uniqe name', (done) ->
       err <- sut.insert 'name', 'bbbbb'
       should.exist err, 'Validation not triggered.'
+      done!
+
+
+  describe 'Update', ->
+    @it 'updates an existing category', (done) ->
+      current.name.should.equal 'name'
+      err <- sut.update current._id, {name: 'name1'}
+      should.not.exist err
+      _, c <- sut.findById current._id
+      c.name.should.equal 'name1'
       done!

@@ -2,6 +2,7 @@ require! {
   should
   sinon
   mongoose
+  shared: './shared'
   request: 'supertest'
 }
 products = require('../../domain/product')(mongoose)
@@ -17,70 +18,40 @@ const contentTypes = {
 describe 'App', ->
 
   describe 'Products', ->
-    afterEach ->
-      products.findAll.restore?()
-      products.findById.restore?()
-
-
-    describe 'GET: /products', ->
-
-      @it 'lists all products', (done) ->
-        stub = sinon.stub products, 'findAll'
-                    .callsArgWith 0, null, []
-        request sut
-          .get '/products'
-          .end (_, res)->
-            res.should.have.status 200
-            res.should.be.json
-            res.text.should.equal '[]'
-            stub.callCount.should.equal 1
-            done!
-
-
-    describe 'GET: /products:id', ->
-
-      @it 'lists all products in json', (done) ->
-        stub = sinon.stub products, 'findById'
-                    .withArgs '17'
-                    .callsArgWith 1, null, { test: 'es ist' }
-        request(sut)
-          .get '/products/17'
-          .end (_, res) ->
-            res.should.have.status 200
-            res.should.be.json
-            res.text.should.include \"test": "es ist"
-            stub.callCount.should.equal 1
-            done!
-
-      @it 'liefert 404 für ein nicht gefundenes Produkt', (done) ->
-        sinon.stub products, 'findById'
-             .withArgs '17'
-             .callsArgWith 1, {}
-        request sut
-          .get '/products/17'
-          .end (_, res) ->
-            res.should.have.status 404
-            done!
-
+    shared.shouldBehaveLikeGETList sut, products, 'products'
+    shared.shouldBehaveLikeGETSingle sut, products, 'products'
 
   describe 'Kategorien', ->
-    afterEach ->
-      categories.findAll.restore?()
-      categories.findById.restore?()
+    shared.shouldBehaveLikeGETList sut, categories, 'categories'
+    shared.shouldBehaveLikeGETSingle sut, categories, 'categories'
 
-
-    describe 'GET: /categories', ->
-
-      @it 'lists all categories', (done) ->
-        stub = sinon.stub categories, 'findAll'
-                    .callsArgWith 0, null, []
+    describe 'POST: /categories', ->
+      @it 'inserts a new item', (done) ->
+        data = { name: 'test', displaytext: 'text' }
+        stub = sinon.stub categories, 'insert'
+                    .withArgs data.name, data.displaytext
+                    .callsArg 2
         request sut
-          .get '/categories'
-          .end (_, res)->
-            res.should.have.status 200
-            res.should.be.json
-            res.text.should.equal '[]'
+          .post "/categories"
+          .send data
+          .end (_, res) ->
+            res.should.have.status 201
             stub.callCount.should.equal 1
             done!
 
+      @it 'handles server errors'
 
+
+    describe 'PUT: /categories/:id' ->
+      @it 'updates an existing item' (done) ->
+        data = { name: 'test', displaytext: 'text' }
+        stub = sinon.stub categories, 'update'
+                    .withArgs '17',data
+                    .callsArg 2
+        request sut
+          .put "/categories/17"
+          .send data
+          .end (_, res) ->
+            res.should.have.status 204
+            stub.callCount.should.equal 1
+            done!

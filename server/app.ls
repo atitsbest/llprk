@@ -20,6 +20,8 @@ module.exports = (products, categories) ->
     mongoose.connect 'mongodb://localhost/llprk_test', (err) ->
       console.error err if err
 
+    app.use express.bodyParser!
+
 
   app.get '/', (req, res) ->
     res.send 500
@@ -40,5 +42,19 @@ module.exports = (products, categories) ->
     if err? then res.statusCode = 500; res.json err
     else res.send cs
 
+  app.get '/categories/:id', (req, res) ->
+    err, c <- categories.findById req.params.id
+    if c? then res.send c
+    else res.send 404
+
+  app.post '/categories', (req, res) ->
+    err, c <- categories.insert req.body.name, req.body.displaytext
+    if err? then res.statusCode = 500; res.json err
+    else res.statusCode = 201; res.send c
+
+  app.put '/categories/:id', (req, res) ->
+    err, c <- categories.update req.params.id, req.body
+    if err? then res.statusCode = 500; res.json err
+    else res.statusCode = 204; res.send c
 
   return app
