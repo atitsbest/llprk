@@ -5,8 +5,8 @@ require! {
   shared: './shared'
   request: 'supertest'
 }
-products = require('../../domain/product')(mongoose)
-categories = require('../../domain/category')(mongoose)
+products = require('../../server/domain/product')(mongoose)
+categories = require('../../server/domain/category')(mongoose)
 sut = require('../../server/app')(products, categories)
 
 # Constants
