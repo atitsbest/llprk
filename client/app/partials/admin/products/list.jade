@@ -1,0 +1,27 @@
+.row
+  .span4
+    h3 Produkte
+    
+  .span5.pull-right
+    input.search-query.pull-right(type="text", 
+                                  ng-model="search", 
+                                  placeholder="Suchen...")
+  table.table
+    thead
+      tr
+        th Name
+        th Beschreibung
+        th Preis
+        th
+          a(href="#/products/new")
+            i.icon-plus-sign
+    tbody
+      tr(ng-repeat="product in products | filter:search | orderBy:'name'")
+        td 
+          b
+            a(href="#/products/{{product._id}}") {{product.name}}
+        td {{product.descr}}
+        td {{product.price | currency}}
+        td
+          a(ng-click="remove(product._id)")
+            i.icon-trash

@@ -1,0 +1,52 @@
+form.form-horizontal(name="newProduct")
+  legend {{headerText()}}
+  //- Name
+  .control-group(ng-class="{error: newProduct.name.$invalid}")
+    label.control-label Name
+    .controls
+      input.input-xxlarge(type="text", 
+                          name="name", 
+                          placeholder="Name", 
+                          ng-model="product.name", 
+                          required)
+      span.help-inline(ng-show="newProduct.name.$error.required") Bitte Name angeben.
+  //- Beschreibung
+  .control-group
+    label.control-label Beschreibung
+    .controls
+      textarea.input-xxlarge(rows="4", 
+                             placeholder="Beschreibung", 
+                             ng-model="product.descr")
+  //- Preis
+  .control-group(ng-class="{error:newProduct.price.$invalid}")
+    label.control-label Preis
+    .controls
+      .input-prepend
+        span.add-on €
+        input.input-small.align-right(type="text", 
+                                      name="price",
+                                      placeholder="0.00", 
+                                      ng-model="product.price",
+                                      required)
+      span.help-inline(ng-show="newProduct.price.$error.required") Bitte Preis angeben.
+
+  .control-group(ng-hide="isNew()")
+    label.control-label Bilder
+    .controls
+      #fileUploader
+      .row-fluid
+        .span2(ng-repeat="picture in product.pictures")
+          img.thumbnail(src="{{picture.url}}", 
+              alt="{{picture.text}}",
+              width="100%")
+
+  //- Actions
+  .control-group
+    .controls
+      button.btn.btn-success(ng-click="save()",
+                             ng-disabled="newProduct.$invalid") Speichern
+      &nbsp;
+      small oder
+      &nbsp;
+      a(href="#/products") Zurück
+
