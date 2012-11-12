@@ -7,11 +7,12 @@ require! {
   http
   sinon
   should
+  helper: '../../helper'
 }
+helper.ensureMongooseConnection mongoose
 categories = require('../../../server/domain/category')(mongoose)
 pictures = require('../../../server/domain/picture')(mongoose, storage_nil, resizer_nil)
 sut = require('../../../server/domain/product')(mongoose)
-#mongoose.createconnect 'mongodb://localhost/llprk_test'
 
 describe 'Product', ->
   # Das Produkt in der DB.

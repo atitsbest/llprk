@@ -1,11 +1,12 @@
 require! {
   mongoose
   should
+  helper: '../../helper'
 }
+helper.ensureMongooseConnection mongoose
 sut = require('../../../server/domain/category')(mongoose)
-#mongoose.connect 'mongodb://localhost/llprk_test'
 
-describe 'Category', ->
+describe 'Domain: Kategorie', ->
   # Die Kategorie in der DB. 
   current = null
 

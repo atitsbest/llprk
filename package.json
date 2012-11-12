@@ -10,13 +10,18 @@
     "formidable": ">=1.0.11",
     "node-static": ">=0.6.2",
     "imagemagick": ">=0.1.2",
-    "node-uuid" : "x",
-    "awssum": "x"
+    "node-uuid": "x",
+    "awssum": "x",
+    "passport": "0.1.x"
   },
   "devDependencies": {
     "should": "x",
     "sinon": "x",
     "prelude-ls": "x",
     "supertest": "x"
+  },
+  "scripts": {
+    "test": "mocha",
+    "server": "lsc server/server.ls"
   }
 }

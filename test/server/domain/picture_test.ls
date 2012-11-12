@@ -7,9 +7,12 @@ require! {
   http
   sinon
   should
+  helper: '../../helper'
 }
+helper.ensureMongooseConnection mongoose
 sut = require('../../../server/domain/picture')(mongoose, storage_nil, resizer_nil)
-#mongoose.connect 'mongodb://localhost/llprk_test'
+unless mongoose.connection
+  mongoose.connect 'mongodb://localhost/llprk_test'
 
 describe 'Picture', ->
   current = null

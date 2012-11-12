@@ -3,8 +3,9 @@ require! {
   should
   prelude: 'prelude-ls'
   productFixture: '../fixtures/products'
+  helper: '../../helper'
 }
-#mongoose.connect 'mongodb://localhost/llprk_test'
+helper.ensureMongooseConnection mongoose
 categories = require('../../../server/domain/category')(mongoose)
 products = require('../../../server/domain/product')(mongoose)
 sut = require('../../../server/domain/order')(mongoose)

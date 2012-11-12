@@ -4,18 +4,24 @@ require! {
   request: 'supertest'
 }
 
-exports.shouldBehaveLikeGETSingle = (sut, domain, name) ->
-  describe "GET: /#{name}:id", ->
+exports.shouldBehaveLikeGETSingle = (sutFn, domain, name) ->
+  sut = null
+
+  describe "GET: /api/#{name}:id", ->
+    beforeEach ->
+      sut := sutFn!
+
     afterEach ->
       domain.findAll.restore?()
       domain.findById.restore?()
+      sut := null
 
     @it 'lists all in json', (done) ->
       stub = sinon.stub domain, 'findById'
                   .withArgs '17'
                   .callsArgWith 1, null, { test: 'es ist' }
       request(sut)
-        .get "/#{name}/17"
+        .get "/api/#{name}/17"
         .end (_, res) ->
           res.should.have.status 200
           res.should.be.json
@@ -28,20 +34,25 @@ exports.shouldBehaveLikeGETSingle = (sut, domain, name) ->
            .withArgs '17'
            .callsArgWith 1, {}
       request sut
-        .get "/#{name}/17"
-        .end (_, res) ->
-          res.should.have.status 404
-          done!
+        .get "/api/#{name}/17"
+        .expect 404, done
 
 
-exports.shouldBehaveLikeGETList = (sut, domain, name) ->
-  describe "GET: /#{name}", ->
+exports.shouldBehaveLikeGETList = (sutFn, domain, name) ->
+  sut = null
+
+  describe "GET: /api/#{name}", ->
+    beforeEach ->
+      sut := sutFn!
+
+    afterEach ->
+      sut := null
 
     @it 'lists all', (done) ->
       stub = sinon.stub domain, 'findAll'
                   .callsArgWith 0, null, []
       request sut
-        .get "/#{name}"
+        .get "/api/#{name}"
         .end (_, res)->
           res.should.have.status 200
           res.should.be.json
