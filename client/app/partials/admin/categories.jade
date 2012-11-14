@@ -1,0 +1,11 @@
+h2 Kategorien
+ul.unstyled
+  li
+    form.form-inline(ng-submit="insert()")
+      input.input-large(type="text", ng-model="new.name", placeholder="Name")
+      input.btn.btn-primary(type="submit", value="Anlegen")
+
+  li(ng-repeat="cat in categories")    
+    form.form-inline(ng-submit="update")
+      input.input-large(type="text", ng-model="cat.name", placeholder="Name")
+  

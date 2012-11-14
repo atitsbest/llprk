@@ -92,6 +92,24 @@ describe 'App', ->
     shared.shouldBehaveLikeGETList _createSut, products, 'products'
     shared.shouldBehaveLikeGETSingle _createSut, products, 'products'
 
+    describe 'POST: /api/products', ->
+      @it 'inserts a new item', (done) ->
+        data = {
+          name: 'test',
+          descr: 'text',
+          price: 9.99,
+          category: 12 }
+        stub = sinon.stub products, 'insert'
+                    .withArgs data.name, data.descr, data.price, data.category, null
+                    .callsArg 5
+        request sut
+          .post "/api/products"
+          .send data
+          .end (_, res) ->
+            res.should.have.status 201
+            stub.callCount.should.equal 1
+            done!
+
   describe 'Kategorien', ->
     shared.shouldBehaveLikeGETList _createSut, categories, 'categories'
     shared.shouldBehaveLikeGETSingle _createSut, categories, 'categories'

@@ -1,5 +1,14 @@
-form.form-horizontal(name="newProduct")
+form.form-horizontal(name="newProduct", ng-submit="save()")
   legend {{headerText()}}
+  //- Kategorie
+  .control-group(ng-class="{error: newProduct.category.$invalid}")
+    label.control-label Kategorie
+    .controls
+      select(name="category", 
+             ng-model="product.category", 
+             ng-options="c.name for c in categories",
+             required)
+        option(value="") -- bitte wählen --
   //- Name
   .control-group(ng-class="{error: newProduct.name.$invalid}")
     label.control-label Name
@@ -33,18 +42,11 @@ form.form-horizontal(name="newProduct")
   .control-group(ng-hide="isNew()")
     label.control-label Bilder
     .controls
-      #fileUploader
-      .row-fluid
-        .span2(ng-repeat="picture in product.pictures")
-          img.thumbnail(src="{{picture.url}}", 
-              alt="{{picture.text}}",
-              width="100%")
 
   //- Actions
   .control-group
     .controls
-      button.btn.btn-success(ng-click="save()",
-                             ng-disabled="newProduct.$invalid") Speichern
+      button.btn.btn-success(ng-disabled="newProduct.$invalid") Speichern
       &nbsp;
       small oder
       &nbsp;

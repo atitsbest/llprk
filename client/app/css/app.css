@@ -1,5 +1,15 @@
 /* app css stylesheet */
+body {
+  background: #F0EFE7 url(../img/body.jpg);
+  padding: 20px 0;
+}
 
+.container {
+  padding: 0 20px;
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
+  background: #fff;
+}
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;

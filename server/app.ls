@@ -19,7 +19,7 @@ module.exports = (products, categories, auth) ->
 
   app.configure ->
     # Mit der DB verbinden.
-    unless mongoose.connection?
+    if mongoose.connection?
       mongoose.connect 'mongodb://localhost/llprk_test', (err) ->
         console.error err if err
 
@@ -69,6 +69,12 @@ module.exports = (products, categories, auth) ->
     err, p <- products.findById req.params.id
     if p? then res.send p
     else res.send 404
+  
+  app.post '/api/products', (req, res) ->
+    b = req.body
+    err, p <- products.insert b.name, b.descr, b.price, b.category, null
+    if err? then res.statusCode = 500; res.json err
+    else res.statusCode = 201; res.send p
 
 
   app.get '/api/categories', (req, res) ->
